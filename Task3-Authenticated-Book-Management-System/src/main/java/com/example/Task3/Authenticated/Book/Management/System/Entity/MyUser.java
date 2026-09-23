@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.util.HashSet;
+import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -30,11 +31,29 @@ public class MyUser {
     @NotNull
     String password;
 
-    HashSet<String> roles;
+    private HashSet<String> roles;
+
+    private boolean isEnabled;
+
+    private boolean isCredentialsNonExpired;
+
+    private boolean isAccountNonLocked;
+
+    private boolean isAccountNonExpired;
 
     public MyUser(String username_, String password_){
         username = username_;
         password = password_;
+
+        roles = new HashSet<>(Set.of("USER"));
+
+        isEnabled = true;
+
+        isCredentialsNonExpired = true;
+
+        isAccountNonLocked = true;
+
+        isAccountNonExpired = true;
     }
 
 

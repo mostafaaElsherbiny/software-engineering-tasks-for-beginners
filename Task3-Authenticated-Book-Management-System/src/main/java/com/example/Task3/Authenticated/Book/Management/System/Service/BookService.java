@@ -1,6 +1,7 @@
 package com.example.Task3.Authenticated.Book.Management.System.Service;
 
 
+import com.example.Task3.Authenticated.Book.Management.System.DTOs.BookDto;
 import com.example.Task3.Authenticated.Book.Management.System.Entity.Book;
 import com.example.Task3.Authenticated.Book.Management.System.Repository.BookRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +14,12 @@ public class BookService {
     @Autowired
     private BookRepo bookRepo;
 
-    public Book createBook(Book book){
-        return bookRepo.save(book);
+    public Book createBook(BookDto book){
+        Book newBook = new Book();
+        newBook.setAuthor(book.getAuthor());
+        newBook.setTitle(book.getTitle());
+        newBook.setPublishedDate(book.getPublishedDate());
+        return bookRepo.save(newBook);
     }
     public Book updateBookById(Long bookId, Book book){
         if(bookRepo.existsById(bookId)){

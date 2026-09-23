@@ -1,6 +1,7 @@
 package com.example.Task3.Authenticated.Book.Management.System.Controller;
 
 
+import com.example.Task3.Authenticated.Book.Management.System.DTOs.BookDto;
 import com.example.Task3.Authenticated.Book.Management.System.Entity.Book;
 import com.example.Task3.Authenticated.Book.Management.System.Service.BookService;
 import jakarta.validation.Valid;
@@ -12,31 +13,32 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/books")
+@RequestMapping("/api/v1/books")
 
 public class BookController {
     @Autowired
     private BookService bookService;
 
     @PostMapping()
-    public ResponseEntity<Book> createBook(@Valid Book book){
+    public ResponseEntity<Book> createBook(@Valid @RequestBody BookDto book){
         return new ResponseEntity<>(bookService.createBook(book), HttpStatus.CREATED);
     }
-    @PutMapping()
-    public ResponseEntity<Book> updateBookById(Long Id, @Valid Book book){
-        return new ResponseEntity<>(bookService.updateBookById(Id,book), HttpStatus.OK);
+    @PutMapping("/{bookId}")
+    public ResponseEntity<Book> updateBookById(@PathVariable Long bookId, @Valid @RequestBody Book book){
+        return new ResponseEntity<>(bookService.updateBookById(bookId,book), HttpStatus.CREATED);
     }
     @GetMapping()
-    public ResponseEntity<List<Book>> findAll(){
+    public ResponseEntity<List<Book>> findAllBooks(){
         return new ResponseEntity<>(bookService.findAll(),HttpStatus.OK);
     }
+
     @GetMapping("/{bookId}")
-    public ResponseEntity<Book> findById(Long Id){
-        return new ResponseEntity<>(bookService.findBookById(Id), HttpStatus.FOUND);
+    public ResponseEntity<Book> findBookById(@PathVariable Long bookId){
+        return new ResponseEntity<>(bookService.findBookById(bookId), HttpStatus.OK);
     }
-    @DeleteMapping()
-    public ResponseEntity<Long> deleteById(Long Id){
-        bookService.deleteBookById(Id);
+    @DeleteMapping("/{bookId}")
+    public ResponseEntity<Long> deleteById(@PathVariable Long bookId){
+        bookService.deleteBookById(bookId);
         return new ResponseEntity<>(1L, HttpStatus.OK);
     }
 

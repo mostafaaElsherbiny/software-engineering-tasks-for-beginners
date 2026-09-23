@@ -1,25 +1,27 @@
-package com.example.Task3.Authenticated.Book.Management.System;
+package com.example.Task3.Authenticated.Book.Management.System.DTOs;
 
-import jakarta.validation.Constraint;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
+
 @Component
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
 @Getter
-public class UserLoginDto {
+public class BookDto {
 
 
     @NotBlank
-    private String username;
+    private String author;
 
     @NotBlank
-    private String password;
+    private String title;
+
+    Date publishedDate;
 }

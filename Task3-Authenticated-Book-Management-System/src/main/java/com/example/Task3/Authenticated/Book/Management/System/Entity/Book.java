@@ -1,5 +1,6 @@
 package com.example.Task3.Authenticated.Book.Management.System.Entity;
 
+import com.example.Task3.Authenticated.Book.Management.System.DTOs.BookDto;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -22,5 +23,6 @@ public class Book {
     String author;
 
     Date publishedDate;
+
 
 }

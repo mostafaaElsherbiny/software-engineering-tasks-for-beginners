@@ -7,12 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.ProviderManager;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.authentication.configurers.userdetails.DaoAuthenticationConfigurer;
+
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,20 +20,27 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
+@EnableWebSecurity
 public class SecurityConfigurations {
-    @Autowired
-    MyUserDetailsService myUserDetailsService;
-    @Bean
-    public PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
-    }
 
+//@Bean
+//public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+//    System.out.println("######## SECURITY FILTER CHAIN CREATED ########");
+//    http
+//            .csrf(AbstractHttpConfigurer::disable)
+//            .authorizeHttpRequests(auth -> auth
+//                    .anyRequest().permitAll()
+//            );
+//
+//    return http.build();
+//}
     @Bean
     public SecurityFilterChain securityFilterChain (HttpSecurity httpSecurity) throws Exception{
         httpSecurity
-                .csrf(csrf -> csrf.disable())
+                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/register","/login").permitAll()
+                        .requestMatchers("/api/v1/users/register",
+                        "/api/v1/users/login").permitAll()
                         .anyRequest().authenticated()
                 ).addFilterBefore(authFilter(), UsernamePasswordAuthenticationFilter.class)
                 ; // or .httpBasic()
@@ -42,19 +49,13 @@ public class SecurityConfigurations {
     }
 
     @Bean
-    public UserDetailsService userDetailsService(){
-        return myUserDetailsService;
-    }
-    @Bean
-    public AuthenticationProvider authenticationProvider(){
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService(userDetailsService());
-        provider.setPasswordEncoder(passwordEncoder());
-        return provider;
-    }
-    @Bean
-    public AuthenticationManager authenticationManager(){
-        return new ProviderManager(authenticationProvider());
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+        AuthenticationManager manager =  configuration.getAuthenticationManager();
+        System.out.println(
+                "$$$$$$$$$$$$$$$$$$$$$$$AUTHENTICATION MANAGER = $$$$$$$$$$$$$$$$$$$$$$$$$$$$$4" +
+                        manager.getClass().getName()
+        );
+        return manager;
     }
 
     @Bean
@@ -62,5 +63,12 @@ public class SecurityConfigurations {
         return new JwtAuthenticationFilter();
     }
 
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
 
 }
+
+
