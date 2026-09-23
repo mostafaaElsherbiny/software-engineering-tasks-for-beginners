@@ -46,27 +46,5 @@ public class UserController {
         else throw new UsernameNotFoundException("Invalid Credentials");
 
     }
-    @GetMapping()
-    public ResponseEntity<List<MyUser>> findAllUsers() {
-        return ResponseEntity.ok(myUserDetailsService.findAllUsers());
-    }
-    @GetMapping("findById/{id}")
-    public ResponseEntity<MyUser> findUserById(@PathVariable Long id) {
-        return ResponseEntity.ok(myUserDetailsService.findById(id));
-    }
-    @GetMapping("findByUsername/{username}")
-    public ResponseEntity<MyUser> findUserByUsername(String username) {
-        return ResponseEntity.ok(myUserDetailsService.findByUsername(username));
-    }
-
-    @DeleteMapping("/deleteByUsername/{username}")
-    public ResponseEntity<Long> deleteUserByUsername(@PathVariable String username){
-        return ResponseEntity.ok(myUserDetailsService.deleteByUsername(username));
-    }
-    @DeleteMapping("deleteById/{id}")
-    public ResponseEntity<Long> deleteUserById(@PathVariable Long id){
-        myUserDetailsService.deleteById(id);
-        return ResponseEntity.ok(1L);
-    }
 
 }
